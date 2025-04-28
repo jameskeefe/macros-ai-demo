@@ -12,7 +12,21 @@ class MacrosController < ApplicationController
 
     c = OpenAI::Chat.new
     c.system("You are an expert nutritionist. The user will give you an image and/or a description of a meal. Your job is to estimate the number of macronutrients and calories in it.")
-    c.user{@the_description)
+    
+    if @the_image.blank? && @the_description.blank?
+      @notes = "You must provide at least one of image or description."
+    else
+      if @the_image.present?
+        c.user("Here's an image:", image: @the_image)
+      end
+
+      if @the_description.present?
+        c.user(@the_description)
+      end
+    end
+
+    c.user(@the_description)
+
     c.schema = '{
           "name": "nutrition_info",
           "schema": {
@@ -49,9 +63,15 @@ class MacrosController < ApplicationController
             "additionalProperties": false
           },
           "strict": true
-        }'
-    
-    structured_output = c.assistant!
+    }'
+
+    @structured_output = c.assistant!
+
+    @g_carbs = @structured_output["carbohydrates"]
+    @g_protein = @structured_output["protein"]
+    @g_fat = @structured_output["fat"]
+    @g_kcal = @structured_output["total_calories"]
+    @notes = @structured_output["notes"]
 
     render({:template => "macros/process_form"})
 
