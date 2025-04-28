@@ -1,4 +1,4 @@
-<h1>Hello world</h1>
+<h1>Process uploaded form & results</h1>
 
 <div>
 Image: <%= @the_image %>
@@ -6,3 +6,17 @@ Image: <%= @the_image %>
 <div>
 Description: <%= @the_description %>
 </div>
+
+<dl>
+  <dt> Carbs (g)</dt>
+  <dt><%= @g_carbs %></dt>
+
+  <dt> Protein (g)</dt>
+  <dt><%= @g_protein %></dt>
+
+  <dt> Fat (g)</dt>
+  <dt><%= @g_fat %></dt>
+
+  <dt> Total calories (kcal)</dt>
+  <dt><%= @kcal %></dt>
+</dl>
